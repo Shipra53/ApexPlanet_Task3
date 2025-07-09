@@ -3,7 +3,7 @@
 // =========================================================
 // Global Constants & State
 // =========================================================
-const OPENWEATHER_API_KEY = "6fc82b640b8cad9d9b679089ce135f1b"; // <-- Your API Key is here
+const OPENWEATHER_API_KEY = "API KEY"; // <-- Your API Key is here
 const API_BASE_URL = "https://api.openweathermap.org/data/2.5/weather?";
 
 // --- Custom Message Box Function ---
