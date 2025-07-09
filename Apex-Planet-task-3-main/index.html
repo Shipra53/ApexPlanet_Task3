@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Explorer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom CSS for modern colors and specific overrides -->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="min-h-screen flex flex-col items-center">
+
+    <div class="container bg-white rounded-lg shadow-xl my-8 w-11/12 md:w-4/5 lg:w-3/4 xl:w-2/3 max-w-6xl overflow-hidden">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row items-center justify-between p-6 bg-white border-b border-gray-100">
+            <h1 class="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Weather Explorer</h1>
+            <p class="text-gray-600 text-center md:text-left">Discover the world of weather through interactive quizzes, beautiful imagery, and real-time data</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex justify-center p-4 bg-indigo-50 rounded-b-lg">
+            <div class="bg-indigo-100 rounded-full p-1 flex space-x-2 shadow-inner">
+                <button id="quiz-tab" class="tab-button active px-6 py-2 rounded-full text-sm font-medium text-indigo-700 transition duration-300 ease-in-out">
+                    <i class="fas fa-question-circle mr-2"></i>Weather Quiz
+                </button>
+                <button id="gallery-tab" class="tab-button px-6 py-2 rounded-full text-sm font-medium text-gray-700 transition duration-300 ease-in-out">
+                    <i class="fas fa-image mr-2"></i>Image Gallery
+                </button>
+                <button id="weather-tab" class="tab-button px-6 py-2 rounded-full text-sm font-medium text-gray-700 transition duration-300 ease-in-out">
+                    <i class="fas fa-cloud-sun mr-2"></i>Live Weather
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Sections -->
+        <main class="p-6">
+            <!-- Quiz Section -->
+            <section id="quiz-section" class="content-section">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 text-center"><i class="fas fa-book-open mr-2"></i>Weather Knowledge Quiz</h2>
+                <div class="bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
+                    <p class="text-sm text-gray-500 mb-4">Question <span id="current-question-number">1</span> of <span id="total-questions">5</span></p>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                        <div id="quiz-progress-bar" class="bg-indigo-500 h-2.5 rounded-full" style="width: 0%;"></div>
+                    </div>
+                    <p id="quiz-question" class="text-lg font-medium text-gray-700 mb-4"></p>
+                    <div id="quiz-options" class="space-y-3">
+                        <!-- Options will be dynamically inserted here -->
+                    </div>
+                    <button id="submit-answer" class="mt-6 w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out">
+                        Submit Answer
+                    </button>
+                    <p id="quiz-score" class="text-md text-gray-600 mt-4 text-center">Current Score: 0 / 5</p>
+                    <div id="quiz-result" class="hidden mt-6 p-4 rounded-lg text-center font-semibold"></div>
+                    <button id="restart-quiz" class="hidden mt-4 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out">
+                        Restart Quiz
+                    </button>
+                </div>
+            </section>
+
+            <!-- Image Gallery Section -->
+            <section id="gallery-section" class="content-section hidden">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 text-center"><i class="fas fa-images mr-2"></i>Nature Gallery</h2>
+                <div class="relative bg-white rounded-lg shadow-md overflow-hidden max-w-3xl mx-auto">
+                    <!-- Main Carousel Image -->
+                    <div class="relative h-64 md:h-96 bg-gray-300 flex items-center justify-center">
+                        <img id="carousel-main-image" src="" alt="Nature Image" class="w-full h-full object-cover">
+                        <div class="carousel-image-gradient absolute inset-0"></div>
+                        <div class="absolute bottom-4 left-4 text-white p-2 rounded-lg">
+                            <span id="carousel-category" class="bg-pink-500 px-2 py-1 rounded-full text-xs font-semibold mr-2 shadow-md">Category</span>
+                            <h3 id="carousel-title" class="text-xl md:text-2xl font-bold mt-1"></h3>
+                            <p id="carousel-description" class="text-sm md:text-md opacity-90"></p>
+                        </div>
+                        <!-- Arrows -->
+                        <button id="carousel-prev" class="absolute left-4 top-1/2 -translate-y-1/2 carousel-arrow"><i class="fas fa-chevron-left"></i></button>
+                        <button id="carousel-next" class="absolute right-4 top-1/2 -translate-y-1/2 carousel-arrow"><i class="fas fa-chevron-right"></i></button>
+                        <!-- Dots -->
+                        <div id="carousel-dots" class="absolute bottom-4 flex space-x-2">
+                            <!-- Dots will be dynamically inserted -->
+                        </div>
+                    </div>
+
+                    <!-- Thumbnails -->
+                    <div id="carousel-thumbnails" class="flex justify-center p-4 space-x-3 bg-gray-50 border-t border-gray-100">
+                        <!-- Thumbnails will be dynamically inserted -->
+                    </div>
+
+                    <div class="flex justify-center items-center mt-4 text-sm text-gray-600 space-x-4">
+                        <span>Use arrow keys or click the arrows to navigate manually</span>
+                        <div class="flex items-center space-x-2">
+                            <span>Auto-play is enabled</span>
+                            <button id="autoplay-toggle" class="px-3 py-1 bg-indigo-500 text-white rounded-full text-xs hover:bg-indigo-600 transition duration-300">Pause</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Weather Section -->
+            <section id="weather-section" class="content-section hidden">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 text-center"><i class="fas fa-cloud-sun mr-2"></i>Live Weather Data</h2>
+                <div class="bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 mb-6">
+                        <input type="text" id="city-input" placeholder="Enter city name (e.g., Paris, Tokyo, New York)" class="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button id="search-weather" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out flex items-center justify-center">
+                            <i class="fas fa-search mr-2"></i>Search
+                        </button>
+                    </div>
+
+                    <div id="weather-display" class="space-y-4">
+                        <!-- Main Weather Card -->
+                        <div class="weather-main-card p-6 rounded-xl shadow-md flex justify-between items-center relative">
+                            <div>
+                                <p class="text-white text-lg"><i class="fas fa-map-marker-alt mr-2"></i><span id="weather-city">London, Demo</span></p>
+                                <p id="weather-temp" class="text-5xl font-bold mt-2">22°C</p>
+                                <p id="weather-feels-like" class="text-sm opacity-90">Feels like 24°C</p>
+                            </div>
+                            <div class="text-right">
+                                <p id="weather-condition" class="text-xl font-semibold">Partly cloudy</p>
+                                <button id="temp-unit-toggle" class="text-sm opacity-90 hover:underline mt-1">Switch to °F</button>
+                            </div>
+                            <i id="weather-icon" class="fas fa-cloud absolute top-4 right-4 text-white text-4xl opacity-50"></i>
+                        </div>
+
+                        <!-- Additional Weather Info Cards -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="weather-info-card">
+                                <i class="fas fa-wind text-2xl text-indigo-500"></i>
+                                <p id="weather-wind-speed" class="text-lg font-semibold">15 km/h</p>
+                                <p id="weather-wind-dir" class="text-sm text-gray-500">Wind SW</p>
+                            </div>
+                            <div class="weather-info-card">
+                                <i class="fas fa-tint text-2xl text-indigo-500"></i>
+                                <p id="weather-humidity" class="text-lg font-semibold">65%</p>
+                                <p class="text-sm text-gray-500">Humidity</p>
+                            </div>
+                            <div class="weather-info-card">
+                                <i class="fas fa-eye text-2xl text-indigo-500"></i>
+                                <p id="weather-visibility" class="text-lg font-semibold">10 km</p>
+                                <p class="text-sm text-gray-500">Visibility</p>
+                            </div>
+                            <div class="weather-info-card">
+                                <i class="fas fa-tachometer-alt text-2xl text-indigo-500"></i>
+                                <p id="weather-pressure" class="text-lg font-semibold">1012 hPa</p>
+                                <p class="text-sm text-gray-500">Pressure</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="api-info-box mt-6 p-3 border rounded-lg text-sm">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        API Information: This widget demonstrates fetching real-time weather data from an external API. In this demo, we're using sample data, but with a valid API key from Weather API users, you would get live weather information for any city worldwide.
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Feature Cards -->
+        <section class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-gray-100 mt-6 bg-gray-50">
+            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                <i class="fas fa-brain text-4xl text-indigo-500 mb-3"></i>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Interactive Learning</h3>
+                <p class="text-gray-600 text-sm">Test your weather knowledge with engaging quizzes</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                <i class="fas fa-camera text-4xl text-emerald-500 mb-3"></i>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Visual Experience</h3>
+                <p class="text-gray-600 text-sm">Explore stunning weather and nature photography</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                <i class="fas fa-thermometer-half text-4xl text-rose-500 mb-3"></i>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Real-time Data</h3>
+                <p class="text-gray-600 text-sm">Access live weather information from around the world</p>
+            </div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
